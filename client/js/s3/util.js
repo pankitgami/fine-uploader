@@ -68,8 +68,12 @@ qq.s3.util = qq.s3.util || (function() {
             var patterns = [
                     //bucket in domain
                     /^(?:https?:\/\/)?([a-z0-9.\-_]+)\.s3(?:-[a-z0-9\-]+)?\.amazonaws\.com/i,
+                    //bucket in domain (google)
+                    /^(?:https?:\/\/)?([a-z0-9.\-_]+)\.storage(?:-[a-z0-9\-]+)?\.googleapis\.com/i,
                     //bucket in path
                     /^(?:https?:\/\/)?s3(?:-[a-z0-9\-]+)?\.amazonaws\.com\/([a-z0-9.\-_]+)/i,
+                    //bucket in path (google)
+                    /^(?:https?:\/\/)?storage(?:-[a-z0-9\-]+)?\.googleapis\.com\/([a-z0-9.\-_]+)/i,
                     //custom domain
                     /^(?:https?:\/\/)?([a-z0-9.\-_]+)/i
                 ],
@@ -362,7 +366,7 @@ qq.s3.util = qq.s3.util || (function() {
                 adjustedMaxSize = maxSize <= 0 ? 9007199254740992 : maxSize;
 
             if (minSize > 0 || maxSize > 0) {
-                policy.conditions.push(["content-length-range", adjustedMinSize.toString(), adjustedMaxSize.toString()]);
+                policy.conditions.push(["content-length-range", Math.round(adjustedMinSize), Math.round(adjustedMaxSize)]);
             }
         },
 
